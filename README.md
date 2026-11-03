@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-informational)
 
-Quanto o comércio das cidades de frente para o mar recebe a mais entre dezembro e fevereiro? Não existe dado público de vendas por município, então usei o **Pix recebido por empresas em cada cidade** (Banco Central) como medida do movimento local e conferi o resultado com as **contratações em supermercados** (Novo CAGED). A comparação é entre as cidades defrontantes com o mar (lista do IBGE) e o resto do país, com um modelo de efeitos fixos que desconta o crescimento do Pix e o Natal, que acontecem em todo lugar.
+Quanto o comércio das cidades de frente para o mar recebe a mais entre dezembro e fevereiro? Não existe dado público de vendas por município, então usei o **Pix recebido por empresas em cada cidade** (Banco Central) como medida do movimento local. As contratações em supermercados (Novo CAGED) entram numa próxima versão, como segunda fonte. A comparação é entre as cidades defrontantes com o mar (lista do IBGE) e o resto do país, com um modelo de efeitos fixos que desconta o crescimento do Pix e o Natal, que acontecem em todo lugar.
 
 **[Site](https://olucas-passos.github.io/comercio-litoral-fim-de-ano/)** | **[Notebook](notebooks/analise.ipynb)** | **[Resumo em JSON](data/processed/resumo.json)**
 
