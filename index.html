@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O verão no caixa do litoral</title>
+  <meta name="description" content="Quanto o comércio das cidades do litoral brasileiro recebe a mais entre dezembro e fevereiro, medido pelo Pix recebido por empresas em cada município (Banco Central).">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="wrap topo-in">
+      <a class="marca" href="#">O verão no caixa do litoral</a>
+      <div class="menu">
+        <button type="button" class="menu-botao" id="menuBotao" aria-expanded="false" aria-controls="menuLista">
+          <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Seções
+        </button>
+        <nav class="menu-lista" id="menuLista" aria-label="Seções" hidden>
+          <a href="#quando">Em que mês o dinheiro chega</a>
+          <a href="#todo-ano">Acontece todo verão?</a>
+          <a href="#quanto">Quanto entra a mais</a>
+          <a href="#cidades">Cidades</a>
+          <a href="#estados">Estados</a>
+          <a href="#fora">Quem está pagando</a>
+          <a href="#mercados" data-caged>Supermercados</a>
+          <a href="#simulador">Simulador</a>
+          <a href="#robustez">Testes de robustez</a>
+          <a href="#metodo">Como fiz</a>
+          <a href="#dados">Dados</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="abertura">
+      <div class="wrap">
+        <h1>Quanto o comércio do litoral fatura a mais no verão?</h1>
+        <p class="lead">Todo fim de ano muita gente desce para a praia, e boa parte passa no mercado, na padaria e no restaurante da cidade. Quis medir o tamanho disso. Como não existe dado público de vendas por município, usei o valor que as empresas de cada cidade receberam via Pix, mês a mês, de <span data-inicio></span> a <span data-fim></span>, e comparei as <span data-n-litoral></span> cidades de frente para o mar com o resto do país.</p>
+        <p class="fonte">Dados do Banco Central (Pix por município)<span data-caged>, do Ministério do Trabalho (Novo CAGED)</span> e do IBGE. Valores corrigidos pelo IPCA, em reais de <span data-fim></span>. Código e dados tratados no <a href="https://github.com/oLucas-Passos/comercio-litoral-fim-de-ano" target="_blank" rel="noopener">repositório do projeto</a>.</p>
+        <div class="numeros" id="numeros"></div>
+      </div>
+    </section>
+
+    <section id="quando">
+      <div class="wrap">
+        <h2>Em que mês o dinheiro chega?</h2>
+        <p class="texto" id="txtQuando"></p>
+        <div class="duas">
+          <figure>
+            <figcaption>Pix recebido por empresas em relação a um mês comum (média de abril a outubro = 100)</figcaption>
+            <div class="grafico"><canvas id="chPerfil" aria-label="Perfil mensal do litoral e do interior"></canvas></div>
+          </figure>
+          <figure>
+            <figcaption>Quanto o litoral fica acima do interior em cada mês, já descontado o que é comum ao país todo</figcaption>
+            <div class="grafico"><canvas id="chEfeitos" aria-label="Efeito do litoral por mês com intervalo de 95%"></canvas></div>
+          </figure>
+        </div>
+        <p class="nota">No primeiro gráfico, fevereiro cai nos dois grupos porque tem menos dias, e a curva sobe ao longo do ano porque o uso do Pix ainda cresce. No segundo, essas duas coisas já foram descontadas. O traço vertical de cada barra é o intervalo de confiança de 95%, e barras claras não são estatisticamente diferentes de zero.</p>
+      </div>
+    </section>
+
+    <section id="todo-ano">
+      <div class="wrap">
+        <div class="cab">
+          <h2>Acontece todo verão?</h2>
+        </div>
+        <p class="texto" id="txtTodoAno"></p>
+        <figure>
+          <figcaption>Índice do litoral dividido pelo índice do interior, mês a mês (100 = os dois no mesmo ritmo)</figcaption>
+          <div class="grafico alto"><canvas id="chSerie" aria-label="Série mensal do litoral e do interior"></canvas></div>
+        </figure>
+        <ul class="legenda-extra" id="legendaSerie"></ul>
+        <div class="duas larga-esq">
+          <figure>
+            <figcaption>Alta do litoral sobre o interior de dezembro a fevereiro, por temporada</figcaption>
+            <div class="grafico baixo"><canvas id="chTemporadas" aria-label="Efeito por temporada"></canvas></div>
+          </figure>
+          <p class="texto lateral" id="txtTemporadas"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quanto">
+      <div class="wrap">
+        <div class="cab">
+          <h2>Quanto entra a mais?</h2>
+          <button type="button" class="botao" data-csv="temporadas">Baixar CSV</button>
+        </div>
+        <p class="texto" id="txtQuanto"></p>
+        <div class="duas larga-dir">
+          <figure>
+            <figcaption>Movimento extra da temporada, somando as cidades do litoral fora as capitais (R$ bilhões de <span data-fim></span>)</figcaption>
+            <div class="grafico"><canvas id="chExcesso" aria-label="Excesso por temporada"></canvas></div>
+          </figure>
+          <div class="tab-wrap"><table class="tabela" id="tblTemporadas"></table></div>
+        </div>
+        <p class="nota">O movimento extra de cada cidade é a parte do que ela recebeu de dezembro a fevereiro explicada pela sua alta típica (a mediana das temporadas, contra o interior do próprio estado). As capitais ficam fora da soma: nelas o Pix recebido por empresas é dominado por pagamentos entre empresas, e uma variação pequena em percentual vira bilhões que não têm a ver com turismo.</p>
+      </div>
+    </section>
+
+    <section id="cidades">
+      <div class="wrap">
+        <div class="cab">
+          <h2>Quais cidades mais sentem o verão?</h2>
+          <div class="controles">
+            <label class="campo">Estado <select id="selUfRank"></select></label>
+            <div class="abas" id="abaRank" role="group" aria-label="Métrica"></div>
+          </div>
+        </div>
+        <p class="texto" id="txtCidades"></p>
+        <figure>
+          <figcaption id="capRank"></figcaption>
+          <div class="grafico ranking"><canvas id="chRank" aria-label="Ranking de cidades"></canvas></div>
+        </figure>
+        <div class="cab sub">
+          <h3>Todas as cidades do litoral</h3>
+          <div class="controles">
+            <input type="search" class="busca" id="buscaCidade" placeholder="Buscar cidade" aria-label="Buscar cidade">
+            <button type="button" class="botao" data-csv="cidades">Baixar CSV</button>
+          </div>
+        </div>
+        <div class="tab-wrap rolagem"><table class="tabela ordenavel" id="tblCidades"></table></div>
+        <p class="nota" id="notaCidades"></p>
+      </div>
+    </section>
+
+    <section id="estados">
+      <div class="wrap">
+        <h2>E em cada estado?</h2>
+        <p class="texto" id="txtEstados"></p>
+        <div class="heat-wrap"><table class="heat" id="heatUfs"></table></div>
+        <div class="escala-cor"><span id="escalaMin"></span><i></i><span id="escalaMax"></span></div>
+      </div>
+    </section>
+
+    <section id="fora">
+      <div class="wrap">
+        <h2>Quem está pagando?</h2>
+        <div class="duas larga-esq">
+          <figure>
+            <figcaption>Cidades do litoral: Pix recebido por empresas e Pix pago por moradores (média de abril a outubro = 100)</figcaption>
+            <div class="grafico"><canvas id="chFora" aria-label="Recebido por empresas e pago por moradores"></canvas></div>
+          </figure>
+          <p class="texto lateral" id="txtFora"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="mercados" data-caged>
+      <div class="wrap">
+        <h2>Os supermercados contratam mais?</h2>
+        <p class="texto" id="txtMercados"></p>
+        <div class="duas" id="blocoMercados">
+          <figure>
+            <figcaption>Admissões em hiper, super e minimercados (média de abril a outubro = 100)</figcaption>
+            <div class="grafico"><canvas id="chCaged" aria-label="Admissões em supermercados por mês"></canvas></div>
+          </figure>
+          <figure>
+            <figcaption>Cada ponto é uma cidade do litoral: alta do Pix no verão e alta das contratações de novembro a janeiro</figcaption>
+            <div class="grafico"><canvas id="chDispersao" aria-label="Dispersão entre Pix e contratações"></canvas></div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="simulador">
+      <div class="wrap">
+        <h2>Simule para uma cidade</h2>
+        <p class="texto antes">Escolha uma cidade do litoral e informe quanto um comércio fatura num mês comum. A conta usa o padrão médio da cidade nos verões analisados.</p>
+        <div class="simulador">
+          <label>Cidade
+            <input list="listaCidades" id="simCidade" autocomplete="off">
+            <datalist id="listaCidades"></datalist>
+          </label>
+          <label>Faturamento num mês comum (R$)
+            <input type="number" id="simValor" min="0" step="1000" value="100000">
+          </label>
+        </div>
+        <div class="duas larga-dir sim-saida">
+          <div class="tab-wrap"><table class="tabela" id="tblSim"></table></div>
+          <figure>
+            <figcaption id="capSim"></figcaption>
+            <div class="grafico baixo"><canvas id="chSim" aria-label="Perfil da cidade escolhida"></canvas></div>
+          </figure>
+        </div>
+        <p class="nota" id="notaSim"></p>
+      </div>
+    </section>
+
+    <section id="robustez">
+      <div class="wrap">
+        <h2>O resultado se sustenta?</h2>
+        <p class="texto" id="txtRobustez"></p>
+        <figure>
+          <figcaption>Alta média do litoral de dezembro a fevereiro em cada versão do modelo, com intervalo de 95%</figcaption>
+          <div class="grafico medio"><canvas id="chRobustez" aria-label="Testes de robustez"></canvas></div>
+        </figure>
+      </div>
+    </section>
+
+    <section id="metodo" class="metodo">
+      <div class="wrap estreito">
+        <h2>Como fiz</h2>
+        <h3>De onde vêm os números</h3>
+        <p>O Banco Central publica, para cada município e mês, o valor total de Pix enviado e recebido por pessoas e por empresas. Usei o valor <b>recebido por empresas</b> (pessoas jurídicas com cadastro no município) como medida do movimento do comércio local. A lista de cidades do litoral é a de municípios defrontantes com o mar, do IBGE. <span data-caged>As contratações vêm dos microdados do Novo CAGED, filtrando hipermercados, supermercados e minimercados (CNAE 4711-3/01, 4711-3/02 e 4712-1/00).</span><span data-sem-caged>As contratações em supermercados (microdados do Novo CAGED) entram numa próxima atualização.</span></p>
+        <p>Comecei em <span data-inicio></span> porque nos primeiros meses depois do lançamento (novembro de 2020) o Pix crescia por adoção, não por consumo. Valores corrigidos pelo IPCA. Cidades com algum mês sem Pix recebido por empresas ficaram de fora (<span id="excluidos"></span>).</p>
+        <h3>O modelo</h3>
+        <p>Comparar janeiro com julho dentro do litoral não basta, porque o Pix ainda cresce e porque dezembro é forte em todo lugar (Natal, 13º salário). Por isso estimei uma regressão com efeitos fixos de cidade e de mês:</p>
+        <pre class="formula">log(Pix<sub>it</sub>) = a<sub>i</sub> + g<sub>t</sub> + &Sigma;<sub>m</sub> b<sub>m</sub> &times; [mês = m] &times; litoral<sub>i</sub> + e<sub>it</sub></pre>
+        <p><i>a<sub>i</sub></i> absorve o tamanho de cada cidade e <i>g<sub>t</sub></i> tudo que acontece no país inteiro naquele mês. O que sobra em <i>b<sub>m</sub></i> é quanto o litoral se afasta do interior em cada mês do ano, medido contra a média de abril a outubro. Erros padrão agrupados por município.</p>
+        <details class="detalhes">
+          <summary>Coeficientes estimados</summary>
+          <div class="tab-wrap"><table class="tabela" id="tblCoef"></table></div>
+          <p class="nota" id="notaCoef"></p>
+        </details>
+        <h3>Alta e valor a mais por cidade</h3>
+        <p>Para cada cidade e temporada, dividi a média de dezembro a fevereiro pela média de abril a outubro do mesmo ano e comparei com a mesma razão nas cidades do interior do próprio estado (média geométrica, para que cada cidade conte igual). A alta típica é a mediana dessas altas nas temporadas, o que evita que um choque isolado, como uma empresa grande que muda de endereço, apareça como efeito do verão. O valor a mais é a parte do movimento de dezembro a fevereiro explicada pela alta típica: <code>3 &times; média(dez a fev) &times; a / (1 + a)</code>.</p>
+        <p>Nos gráficos de perfil, cada cidade também conta igual. Se eu somasse os valores, as capitais decidiriam o resultado sozinhas.</p>
+        <h3>Limitações</h3>
+        <ul>
+          <li>Pix não é faturamento. Cartão e dinheiro ficam de fora, e a fatia do Pix nas vendas mudou ao longo do período.</li>
+          <li>O valor recebido inclui todo tipo de empresa, não só mercados. Pousadas, restaurantes, mercados e lojas entram na mesma conta.<span data-caged> O CAGED serve para olhar especificamente os supermercados, mas mede empregos, não vendas.</span></li>
+          <li>O município é o do cadastro da empresa. Redes com CNPJ centralizado em outra cidade aparecem fora do litoral, e em cidades com porto ou indústria grande o Pix das empresas reflete mais negócios entre empresas do que consumo.</li>
+          <li>A comparação mostra uma associação no tempo. O verão não é a única diferença entre litoral e interior, mas os efeitos fixos tiram tudo o que é fixo de cada cidade e tudo o que é comum a cada mês.</li>
+        </ul>
+        <h3>Cobertura</h3>
+        <p id="txtCobertura"></p>
+        <ul class="avisos" id="avisos"></ul>
+      </div>
+    </section>
+
+    <section id="dados">
+      <div class="wrap estreito">
+        <h2>Dados</h2>
+        <div class="tab-wrap">
+          <table class="tabela textual">
+            <thead><tr><th>Arquivo</th><th>Conteúdo</th></tr></thead>
+            <tbody>
+              <tr><td><a href="data/processed/indice_cidades.csv">indice_cidades.csv</a></td><td>Uma linha por cidade do litoral e temporada: médias da base e do pico, razão do interior, alta e valor a mais</td></tr>
+              <tr><td><a href="data/processed/excesso_temporadas.csv">excesso_temporadas.csv</a></td><td>Soma do valor a mais por temporada</td></tr>
+              <tr><td><a href="data/processed/efeitos_mes.csv">efeitos_mes.csv</a></td><td>Coeficientes do modelo por mês do ano</td></tr>
+              <tr><td><a href="data/processed/painel_pix.csv.gz">painel_pix.csv.gz</a></td><td>Painel município x mês usado no modelo, com valores nominais e reais</td></tr>
+              <tr><td><a href="data/processed/resumo.json">resumo.json</a></td><td>Todos os números citados nesta página</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Para citar</h3>
+        <p class="citacao">Passos, L. (<span data-ano></span>). <i>O verão no caixa do litoral: sazonalidade do Pix recebido por empresas nas cidades costeiras do Brasil</i>. Disponível em github.com/oLucas-Passos/comercio-litoral-fim-de-ano.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="wrap">Feito por <a href="https://github.com/oLucas-Passos" target="_blank" rel="noopener">Lucas Passos</a>. Dados atualizados em <span data-gerado></span>.</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
